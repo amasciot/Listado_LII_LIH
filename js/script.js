@@ -686,6 +686,7 @@ function exportToCSV() {
 }
 
 // Copiar resultados al portapapeles
+// Copiar resultados al portapapeles en formato de tabla
 function copyResultsToClipboard() {
     if (filteredData.length === 0) {
         showStatus('No hay datos para copiar', 'warning');
@@ -697,19 +698,105 @@ function copyResultsToClipboard() {
     const nodoColumn = findColumnByName(columnNames, 'nodo') || 'Nodo';
     const prioridadColumn = findColumnByName(columnNames, 'prioridad') || 'Prioridad';
     
-    // Crear texto para copiar
-    let textToCopy = `${ticketColumn}\t${nodoColumn}\t${contratistaColumn}\t${prioridadColumn}\n`;
+    // Obtener valores seleccionados para incluir en el título
+    const selectedOptions = Array.from(contratistaFilter.selectedOptions);
+    const selectedValues = selectedOptions.map(option => option.value).filter(value => value !== "");
+    const prioridadValue = prioridadFilter.value;
     
+    // Crear tabla HTML para copiar
+    let htmlContent = `
+        <div style="font-family: Arial, sans-serif; max-width: 800px;">
+            <p style="color: #0078d4; border-bottom: 2px solid #0078d4; padding-bottom: 10px;">
+                Estimados buenas tardes, favor de brindar prioridad a las siguientes tareas, corresponden a móvil MIC, favor de realizar el barrido/reparación correspondiente en cada caso: 
+            </p>
+            
+            
+            <table style="width: 100%; border-collapse: collapse; margin-top: 15px; border: 1px solid #ddd;">
+                <thead>
+                    <tr style="background-color: #f8f9fa;">
+                        <th style="border: 1px solid #ddd; padding: 10px; text-align: left; font-weight: bold;">${ticketColumn}</th>
+                        <th style="border: 1px solid #ddd; padding: 10px; text-align: left; font-weight: bold;">${nodoColumn}</th>
+                        <th style="border: 1px solid #ddd; padding: 10px; text-align: left; font-weight: bold;">${contratistaColumn}</th>
+                        <th style="border: 1px solid #ddd; padding: 10px; text-align: left; font-weight: bold;">${prioridadColumn}</th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
+    
+    // Agregar filas de datos
     filteredData.forEach(row => {
-        textToCopy += `${row[ticketColumn] || ''}\t${row[nodoColumn] || ''}\t${row[contratistaColumn] || ''}\t${row[prioridadColumn] || ''}\n`;
+        const prioridad = String(row[prioridadColumn] || '').toLowerCase();
+        let priorityStyle = '';
+        
+        if (prioridad.includes('alta')) {
+            priorityStyle = 'background-color: #f8d7da; color: #721c24;';
+        } else if (prioridad.includes('media')) {
+            priorityStyle = 'background-color: #fff3cd; color: #856404;';
+        } else if (prioridad.includes('baja')) {
+            priorityStyle = 'background-color: #d4edda; color: #155724;';
+        }
+        
+        htmlContent += `
+            <tr>
+                <td style="border: 1px solid #ddd; padding: 8px;">${row[ticketColumn] || ''}</td>
+                <td style="border: 1px solid #ddd; padding: 8px;">${row[nodoColumn] || ''}</td>
+                <td style="border: 1px solid #ddd; padding: 8px;">${row[contratistaColumn] || ''}</td>
+                <td style="border: 1px solid #ddd; padding: 8px; ${priorityStyle}">${row[prioridadColumn] || ''}</td>
+            </tr>
+        `;
     });
     
-    // Copiar al portapapeles
-    navigator.clipboard.writeText(textToCopy).then(() => {
-        showStatus('Resultados copiados al portapapeles', 'success');
-    }).catch(err => {
-        showStatus('Error al copiar: ' + err, 'error');
+    htmlContent += `
+                </tbody>
+            </table>
+            
+            <p style="margin-top: 15px; font-size: 12px; color: #6c757d;">
+                Generado el ${new Date().toLocaleDateString()} a las ${new Date().toLocaleTimeString()}
+            </p>
+        </div>
+    `;
+    
+    // Crear también versión de texto plano para compatibilidad
+    let textContent = `RESULTADOS DE FILTRO\n`;
+    textContent += `Contratistas: ${selectedValues.join(', ') || 'Todos'}\n`;
+    textContent += `Prioridad: ${prioridadValue === 'alta' ? 'Solo Alta' : 'Todas'}\n`;
+    textContent += `Total de registros: ${filteredData.length}\n\n`;
+    
+    // Encabezados de tabla en texto plano
+    textContent += `${ticketColumn}\t${nodoColumn}\t${contratistaColumn}\t${prioridadColumn}\n`;
+    
+    // Datos de tabla en texto plano
+    filteredData.forEach(row => {
+        textContent += `${row[ticketColumn] || ''}\t${row[nodoColumn] || ''}\t${row[contratistaColumn] || ''}\t${row[prioridadColumn] || ''}\n`;
     });
+    
+    textContent += `\nGenerado el ${new Date().toLocaleDateString()} a las ${new Date().toLocaleTimeString()}`;
+    
+    // Crear un blob con ambos formatos
+    const blobHtml = new Blob([htmlContent], { type: 'text/html' });
+    const blobText = new Blob([textContent], { type: 'text/plain' });
+    
+    // Usar la Clipboard API para copiar ambos formatos
+    const clipboardItem = new ClipboardItem({
+        'text/html': blobHtml,
+        'text/plain': blobText
+    });
+    
+    navigator.clipboard.write([clipboardItem])
+        .then(() => {
+            showStatus('Tabla de resultados copiada al portapapeles. Puede pegarla en un email.', 'success');
+        })
+        .catch(err => {
+            console.error('Error al copiar con Clipboard API:', err);
+            // Fallback: copiar solo texto plano
+            navigator.clipboard.writeText(textContent)
+                .then(() => {
+                    showStatus('Resultados copiados en formato texto', 'success');
+                })
+                .catch(err => {
+                    showStatus('Error al copiar: ' + err, 'error');
+                });
+        });
 }
 
 // Función para mostrar mensajes de estado
