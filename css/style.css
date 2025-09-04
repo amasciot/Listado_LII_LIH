@@ -654,3 +654,151 @@ body {
     background-color: #d4edda;
     color: #155724;
 }
+/* Panel de correos fijos */
+.fixed-emails {
+    background-color: #fff3cd;
+    border-color: #ffeaa7;
+}
+
+.fixed-emails h3 {
+    color: #856404;
+}
+
+/* Panel de texto de prioridad */
+.priority-text-panel {
+    margin: 20px 0;
+    padding: 15px;
+    background: #d4edda;
+    border-radius: 6px;
+    border: 1px solid #c3e6cb;
+}
+
+.priority-text-panel h3 {
+    color: #155724;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+}
+
+.priority-text-display {
+    padding: 10px;
+    background: white;
+    border-radius: 4px;
+    border: 1px solid #e1e5eb;
+    margin-bottom: 10px;
+    font-family: monospace;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-align: center;
+    color: #155724;
+}
+
+.priority-text-actions {
+    display: flex;
+    justify-content: center;
+}
+/* Panel de correos fijos */
+.fixed-emails {
+    background-color: #fff3cd;
+    border-color: #ffeaa7;
+    display: block !important; /* Forzar visualización */
+    margin: 20px 0;
+}
+
+.fixed-emails h3 {
+    color: #856404;
+}
+
+/* Panel de texto de prioridad */
+.priority-text-panel {
+    margin: 20px 0;
+    padding: 15px;
+    background: #d4edda;
+    border-radius: 6px;
+    border: 1px solid #c3e6cb;
+}
+
+.priority-text-panel h3 {
+    color: #155724;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+}
+
+.priority-text-display {
+    padding: 10px;
+    background: white;
+    border-radius: 4px;
+    border: 1px solid #e1e5eb;
+    margin-bottom: 10px;
+    font-family: monospace;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-align: center;
+    color: #155724;
+}
+
+.priority-text-actions {
+    display: flex;
+    justify-content: center;
+}
+
+/* Asegurar que todos los panels de email se muestren */
+.emails-panel {
+    display: block !important;
+    margin: 20px 0;
+    padding: 15px;
+    background: #f0f7ff;
+    border-radius: 6px;
+    border: 1px solid #c3d9ff;
+}
+
+.emails-panel h3 {
+    color: #0078d4;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1rem;
+}
+
+.emails-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.emails-display {
+    padding: 10px;
+    background: white;
+    border-radius: 4px;
+    border: 1px solid #e1e5eb;
+    min-height: 60px;
+    max-height: 120px;
+    overflow-y: auto;
+    font-family: monospace;
+    font-size: 0.9rem;
+    word-break: break-all;
+}
+
+.emails-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+/* Badges para emails */
+.email-badge {
+    display: inline-block;
+    background: #e8f4fc;
+    color: #0078d4;
+    padding: 3px 8px;
+    border-radius: 12px;
+    margin: 2px;
+    font-size: 0.8rem;
+    border: 1px solid #c3d9ff;
+}
