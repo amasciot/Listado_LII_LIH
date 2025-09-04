@@ -811,3 +811,34 @@ function showStatus(message, type) {
         statusMessage.style.display = 'none';
     }, 5000);
 }
+// Configurar event listeners para los nuevos elementos
+document.addEventListener('DOMContentLoaded', function() {
+    // ... (código existente)
+    
+    // Configurar event listeners para los nuevos botones
+    document.getElementById('copy-fixed-emails').addEventListener('click', copyFixedEmails);
+    document.getElementById('copy-priority-text').addEventListener('click', copyPriorityText);
+});
+
+// Copiar correos fijos al portapapeles
+function copyFixedEmails() {
+    const fixedEmails = "ore@telecentro.net.ar, RutasDiariasRed@telecentro.net.ar, region3_rda@telecentro.net.ar, region2_rda@telecentro.net.ar, redcaba_grano@telecentro.net.ar";
+    
+    navigator.clipboard.writeText(fixedEmails).then(() => {
+        showStatus('Correos fijos copiados al portapapeles', 'success');
+    }).catch(err => {
+        showStatus('Error al copiar correos fijos: ' + err, 'error');
+    });
+}
+
+// Copiar texto de prioridad al portapapeles
+function copyPriorityText() {
+    const priorityText = "INGRESS PRIORITARIOS";
+    
+    navigator.clipboard.writeText(priorityText).then(() => {
+        showStatus('Texto copiado al portapapeles', 'success');
+    }).catch(err => {
+        showStatus('Error al copiar texto: ' + err, 'error');
+    });
+}
+
